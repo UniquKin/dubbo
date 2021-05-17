@@ -26,6 +26,7 @@ import java.util.concurrent.Executor;
 /**
  * ThreadPool
  */
+//默认使用固定线程数的线程池
 @SPI("fixed")
 public interface ThreadPool {
 

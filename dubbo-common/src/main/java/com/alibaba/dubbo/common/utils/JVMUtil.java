@@ -16,6 +16,9 @@
  */
 package com.alibaba.dubbo.common.utils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.lang.management.LockInfo;
 import java.lang.management.ManagementFactory;
@@ -24,6 +27,12 @@ import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 
 public class JVMUtil {
+
+    public static void main(String[] args) throws Exception {
+        //居然不会自动创建目录,只能自动创建文件,又是个新盲点吧
+        FileOutputStream fileOutputStream = new FileOutputStream(new File("/data/temp/dubbo/test", "Dubbo_JStack.log" + "." + 20210515));
+        jstack(fileOutputStream);
+    }
     public static void jstack(OutputStream stream) throws Exception {
         ThreadMXBean threadMxBean = ManagementFactory.getThreadMXBean();
         for (ThreadInfo threadInfo : threadMxBean.dumpAllThreads(true, true)) {

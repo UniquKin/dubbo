@@ -36,6 +36,10 @@ import java.util.concurrent.ThreadPoolExecutor;
  * Abort Policy.
  * Log warn info when abort.
  */
+//每10分钟打印一次线程的情况到本地文件
+//    使用信号量保证是10分钟执行一次
+//    还会打印debug日志
+//    最终还会抛出异常
 public class AbortPolicyWithReport extends ThreadPoolExecutor.AbortPolicy {
 
     protected static final Logger logger = LoggerFactory.getLogger(AbortPolicyWithReport.class);
@@ -70,10 +74,11 @@ public class AbortPolicyWithReport extends ThreadPoolExecutor.AbortPolicy {
         long now = System.currentTimeMillis();
 
         //dump every 10 minutes
+        //限制打印的次数  这里直接使用的魔法值,哈哈
         if (now - lastPrintTime < 10 * 60 * 1000) {
             return;
         }
-
+        //居然用到了信号量,回头看下这个信号量有什么用
         if (!guard.tryAcquire()) {
             return;
         }
@@ -88,6 +93,7 @@ public class AbortPolicyWithReport extends ThreadPoolExecutor.AbortPolicy {
                 String OS = System.getProperty("os.name").toLowerCase();
 
                 // window system don't support ":" in file name
+                //很不错的小技巧,window不支持冒号在文件名中
                 if(OS.contains("win")){
                     sdf = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
                 }else {
@@ -102,6 +108,7 @@ public class AbortPolicyWithReport extends ThreadPoolExecutor.AbortPolicy {
                 } catch (Throwable t) {
                     logger.error("dump jstack error", t);
                 } finally {
+                    //信号量在这里释放了
                     guard.release();
                     if (jstackStream != null) {
                         try {
