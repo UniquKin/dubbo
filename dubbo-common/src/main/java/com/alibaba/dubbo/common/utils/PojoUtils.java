@@ -45,6 +45,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 
 /**
  * PojoUtils. Travel object deeply, and convert complex type to simple type.
+ * 深度传输对象，并将复杂类型转换为简单类型。
  * <p/>
  * Simple type below will be remained:
  * <ul>
@@ -60,6 +61,7 @@ public class PojoUtils {
     private static final ConcurrentMap<String, Method> NAME_METHODS_CACHE = new ConcurrentHashMap<String, Method>();
     private static final ConcurrentMap<Class<?>, ConcurrentMap<String, Field>> CLASS_FIELD_CACHE = new ConcurrentHashMap<Class<?>, ConcurrentMap<String, Field>>();
 
+    //概括
     public static Object[] generalize(Object[] objs) {
         Object[] dests = new Object[objs.length];
         for (int i = 0; i < objs.length; i++) {
@@ -89,6 +91,7 @@ public class PojoUtils {
     }
 
     public static Object generalize(Object pojo) {
+        //todo 为什么要用IdentityHashMap呢
         return generalize(pojo, new IdentityHashMap<Object, Object>());
     }
 
@@ -97,10 +100,13 @@ public class PojoUtils {
         if (pojo == null) {
             return null;
         }
-
+        //枚举类型转成String类型
         if (pojo instanceof Enum<?>) {
+            //获取枚举的名字,String类型显示是同枚举写法
             return ((Enum<?>) pojo).name();
         }
+        //pojo.getClass().getComponentType()怎么感觉是可以直接获取array里面的类的类型
+        //枚举数组,转成字符串数组
         if (pojo.getClass().isArray() && Enum.class.isAssignableFrom(pojo.getClass().getComponentType())) {
             int len = Array.getLength(pojo);
             String[] values = new String[len];
@@ -110,10 +116,12 @@ public class PojoUtils {
             return values;
         }
 
+        //原始类型直接返回 为什么原始类型的判断会在后面呢...
         if (ReflectUtils.isPrimitives(pojo.getClass())) {
             return pojo;
         }
-
+        //Class 是final 类型,所以这个instanceof 是确定的意思
+        //类似 club.ispark.common.enums.TestClass 这样的字符串
         if (pojo instanceof Class) {
             return ((Class) pojo).getName();
         }
@@ -156,6 +164,7 @@ public class PojoUtils {
         Map<String, Object> map = new HashMap<String, Object>();
         history.put(pojo, map);
         map.put("class", pojo.getClass().getName());
+        //获取属性,属性名对应的值
         for (Method method : pojo.getClass().getMethods()) {
             if (ReflectUtils.isBeanPropertyReadMethod(method)) {
                 try {

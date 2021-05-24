@@ -27,6 +27,7 @@ import java.util.Set;
 
 public class UrlUtils {
 
+    //根据ip和参数生成URL
     public static URL parseURL(String address, Map<String, String> defaults) {
         if (address == null || address.length() == 0) {
             return null;
@@ -50,12 +51,14 @@ public class UrlUtils {
         }
         String defaultProtocol = defaults == null ? null : defaults.get("protocol");
         if (defaultProtocol == null || defaultProtocol.length() == 0) {
+            //默认的网络协议
             defaultProtocol = "dubbo";
         }
         String defaultUsername = defaults == null ? null : defaults.get("username");
         String defaultPassword = defaults == null ? null : defaults.get("password");
         int defaultPort = StringUtils.parseInteger(defaults == null ? null : defaults.get("port"));
         String defaultPath = defaults == null ? null : defaults.get("path");
+        //以上参数已单独拿出来定制了,原始中不需要了,否则会覆盖
         Map<String, String> defaultParameters = defaults == null ? null : new HashMap<String, String>(defaults);
         if (defaultParameters != null) {
             defaultParameters.remove("protocol");

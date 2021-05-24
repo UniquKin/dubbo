@@ -100,6 +100,7 @@ public final class StringUtils {
         return INT_PATTERN.matcher(str).matches();
     }
 
+    //这个就类似我转默认字符串的那个工具类啊
     public static int parseInteger(String str) {
         if (!isInteger(str))
             return 0;
@@ -144,7 +145,7 @@ public final class StringUtils {
         }
         return false;
     }
-
+    //每一位 都是数字则可以判定是数字
     public static boolean isNumeric(String str) {
         if (str == null) {
             return false;
@@ -162,6 +163,7 @@ public final class StringUtils {
      * @param e
      * @return string
      */
+    //Throwable转string的好方法
     public static String toString(Throwable e) {
         UnsafeStringWriter w = new UnsafeStringWriter();
         PrintWriter p = new PrintWriter(w);
@@ -203,11 +205,13 @@ public final class StringUtils {
      * @param to   target char table.
      * @return String.
      */
+    //字符串替换 字符为单位的替换
     public static String translat(String src, String from, String to) {
         if (isEmpty(src)) return src;
         StringBuilder sb = null;
         int ix;
         char c;
+        //终于看到了这个先获取len的写法了
         for (int i = 0, len = src.length(); i < len; i++) {
             c = src.charAt(i);
             ix = from.indexOf(c);
@@ -343,12 +347,14 @@ public final class StringUtils {
      * @param qs query string.
      * @return Parameters instance.
      */
+    //解析url后面的参数
     public static Map<String, String> parseQueryString(String qs) {
         if (qs == null || qs.length() == 0)
             return new HashMap<String, String>();
         return parseKeyValuePair(qs, "\\&");
     }
-
+    //servicekey 完整的是group+接口名+version
+    //组和版本可选
     public static String getServiceKey(Map<String, String> ps) {
         StringBuilder buf = new StringBuilder();
         String group = ps.get(Constants.GROUP_KEY);
@@ -362,7 +368,7 @@ public final class StringUtils {
         }
         return buf.toString();
     }
-
+    //map类型的参数转成字符串
     public static String toQueryString(Map<String, String> ps) {
         StringBuilder buf = new StringBuilder();
         if (ps != null && ps.size() > 0) {
@@ -383,6 +389,14 @@ public final class StringUtils {
         return buf.toString();
     }
 
+
+    public static void main(String[] args) {
+        System.out.printf(camelToSplitName("camelToSplitName", "="));
+    }
+    // assertEquals("ab-cd-ef", StringUtils.camelToSplitName("abCdEf", "-"));
+    //         assertEquals("ab-cd-ef", StringUtils.camelToSplitName("AbCdEf", "-"));
+    //         assertEquals("ab-cd-ef", StringUtils.camelToSplitName("ab-cd-ef", "-"));
+    //         assertEquals("abcdef", StringUtils.camelToSplitName("abcdef", "-"));
     public static String camelToSplitName(String camelName, String split) {
         if (camelName == null || camelName.length() == 0) {
             return camelName;
@@ -407,7 +421,7 @@ public final class StringUtils {
         }
         return buf == null ? camelName : buf.toString();
     }
-
+    //把数组转成用逗号分割的字符串
     public static String toArgumentString(Object[] args) {
         StringBuilder buf = new StringBuilder();
         for (Object arg : args) {

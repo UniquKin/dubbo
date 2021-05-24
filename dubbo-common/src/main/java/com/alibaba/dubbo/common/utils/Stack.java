@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Stack.
  */
-
+//目前没搞懂这个的意义在那边,好像只是list的一个封装
 public class Stack<E> {
     private int mSize = 0;
 

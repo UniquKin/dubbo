@@ -174,6 +174,7 @@ public final class Version {
         checkDuplicate(cls, false);
     }
 
+    //当前项目路径下面有一个以上的类文件,表示检测到了重复的类
     public static void checkDuplicate(String path, boolean failOnError) {
         try {
             // search in caller's classloader

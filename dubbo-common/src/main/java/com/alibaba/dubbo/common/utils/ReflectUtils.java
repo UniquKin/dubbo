@@ -124,14 +124,14 @@ public final class ReflectUtils {
 
     private ReflectUtils() {
     }
-
+    //判断是否是也是类型，如果是数组，判断数组的内部类型
     public static boolean isPrimitives(Class<?> cls) {
         if (cls.isArray()) {
             return isPrimitive(cls.getComponentType());
         }
         return isPrimitive(cls);
     }
-
+    //原始类型除了基本的8种外，常用的也算
     public static boolean isPrimitive(Class<?> cls) {
         return cls.isPrimitive() || cls == String.class || cls == Boolean.class || cls == Character.class
                 || Number.class.isAssignableFrom(cls) || Date.class.isAssignableFrom(cls);
@@ -158,6 +158,8 @@ public final class ReflectUtils {
     }
 
     /**
+     *
+     * 这个是否兼容的目的是什么，目前没想到
      * is compatible.
      *
      * @param c class.
